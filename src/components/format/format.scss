@@ -1,6 +1,16 @@
 .formatWrapper {
-  background: red;
+  // background: red;
   height: 100%;
   width: 50%;
   float: left;
+  &.hidden {
+    display: none;
+  }
+  &.fullshow {
+    width: 100%;
+  }
+}
+
+.empty {
+  margin-top: 150px;
 }
