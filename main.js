@@ -11,7 +11,7 @@ function createWindow() {
     // win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)  
     
     // 打开开发者工具
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   
     // 当 window 被关闭，这个事件会被触发。
     win.on('closed', () => {
