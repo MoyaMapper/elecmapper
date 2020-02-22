@@ -1,6 +1,28 @@
 .editWrapper {
-  background: orange;
+  background: #fff;
   height: 100%;
   width: 50%;
   float: left;
+  &.hidden {
+    display: none;
+  }
+  &.fullshow {
+    width: 100%;
+  }
+}
+
+.textArea {
+  height: 90%;
+  resize: none;
+  border: none;
+  border-radius: 0;
+  font-size: 20px;
+}
+
+.toolsRow {
+  height: 10%;
+  background: #F6F6F6;
+  .toolsCol {
+    margin-top: 10px;
+  }
 }
