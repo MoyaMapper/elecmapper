@@ -1,0 +1,28 @@
+.headerWrapper {
+  -webkit-app-region: drag;
+  position: relative;
+  background: #1974B8;
+  padding: 0px;
+  height: 63px;
+}
+
+$tools-height: 40px;
+.tools {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  bottom: 0;
+  background: #F6F6F6;
+  width: 100%;
+  height: $tools-height;
+  padding: 0 10px;
+}
+
+.menuIcon {
+  $font-size: 25px;
+  font-size: $font-size;
+  float: right;
+  margin-top: ($tools-height - $font-size) * 0.5;
+  margin-left: 10px;
+  color: #515151;
+  cursor: pointer;
+}

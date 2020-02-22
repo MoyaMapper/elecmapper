@@ -1,8 +1,16 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 let win
+
 function createWindow() {
     // 创建浏览器窗口。
-    win = new BrowserWindow({ width: 800, height: 600 })
+    win = new BrowserWindow({ 
+        width: 800, 
+        height: 600,
+        titleBarStyle: 'hidden',
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
 
     // 然后加载应用的 index.html。  url 及本地文件形式
     win.loadURL('http://localhost:3000')
