@@ -1,9 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Table } from 'antd';
+import { Table, Select, Icon } from 'antd';
 import classNames from 'classnames';
 import { constants } from './store';
 import './format.scss';
+
+const { Option } = Select;
+const { SwiftType, swiftTypeArr } = constants;
 
 const Format = (props) => {
 
@@ -14,8 +17,34 @@ const Format = (props) => {
   })
   const columns = [
     { title: 'Key', dataIndex: 'jsonkey', width: 100 },
-    { title: '类型', dataIndex: 'type', width: 100 }
+    {
+      title: '类型',
+      dataIndex: 'type',
+      width: 100,
+      render: (text, record, index) => {
+        {
+          const findIndex = swiftTypeArr.findIndex((item) => (record.type == item))
+          if (findIndex === -1) 
+            return <span>{record.type}</span>
+          return (
+            <Select 
+              defaultValue={text} 
+              style={{ width: 120 }} 
+              onChange={() => { console.log('handleTypeChange', index) }}
+            >
+              <Option value={SwiftType.int}>{SwiftType.int}</Option>
+              <Option value={SwiftType.bool}>{SwiftType.bool}</Option>
+              <Option value={SwiftType.float}>{SwiftType.float}</Option>
+              <Option value={SwiftType.double}>{SwiftType.double}</Option>
+              <Option value={SwiftType.string}>{SwiftType.string}</Option>
+            </Select>
+          )
+        }
+      }
+    },
+    { title: '操作', dataIndex: 'action', width: 100, render: () => <Icon type="minus-circle" className="columnActionIconDel" /> },
   ]
+  
 
   let container = useRef(null)
   let [tableListHeight, setTableListHeight] = useState(100)
