@@ -4,35 +4,39 @@ import { Input, Row, Col, Button, message } from 'antd';
 import jsonformat from '../../utils/json/jsonformat';
 import classNames from 'classnames';
 import { constants } from './store';
+import { actionCreators as formatActionCreators } from '../format/store';
 import './edit.scss';
 
 const { TextArea } = Input;
 
 const Edit = (props) => {
-  let textArea = useRef(null)
+  let textArea = useRef(null);
 
   const toFormat = () => {
     const currentText = textArea.current.state.value
     if (currentText == undefined || !currentText.length) {
       message.warning('请先填写json数据');
-      return
+      return;
     }
     // 格式化json数据
     const value = jsonformat(currentText, false)
     if (`${value}` == 'undefined') {
-      console.log('进来了')
+      console.log('进来了');
       message.error('无法格式化当前json数据');
-      return
+      return;
     }
-    
+
     // 清空数据
     textArea.current.setState({
       value
-    })
+    });
+
+    return value;
   }
 
   const toTransform = () => {
-    console.log('转换')
+    const value = toFormat();
+    value && props.transformJsonData(value);
   }
 
   const editClassName = classNames({
@@ -42,20 +46,20 @@ const Edit = (props) => {
   })
   return (
     <div className={editClassName}>
-      <TextArea 
+      <TextArea
         className="textArea"
         placeholder="请填写json数据"
         allowClear
         ref={textArea}
       />
-      <Row 
+      <Row
         className="toolsRow"
-        type="flex" 
+        type="flex"
         justify="space-around"
       >
         <Col span={10}>
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             block
             onClick={toFormat}
             className="toolsCol"
@@ -64,8 +68,8 @@ const Edit = (props) => {
           </Button>
         </Col>
         <Col span={10}>
-          <Button 
-            type="danger" 
+          <Button
+            type="danger"
             block
             onClick={toTransform}
             className="toolsCol"
@@ -83,4 +87,10 @@ const mapState = (state) => ({
   hidden: state.getIn(['edit', 'showType']) === constants.showType.hidden
 })
 
-export default connect(mapState, null)(Edit);
+const mapDispatch = (dispatch) => ({
+  transformJsonData(value) {
+    dispatch(formatActionCreators.transformJsonData(value))
+  }
+})
+
+export default connect(mapState, mapDispatch)(Edit);

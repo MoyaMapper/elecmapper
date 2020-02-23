@@ -5,3 +5,4 @@ export let showType = {
 };
 
 export const SWITCH_SHOW_TYPE = "format/SWITCH_SHOW_TYPE";
+export const NEW_FINAL_JSON_DATA = "format/NEW_FINAL_JSON_DATA";
