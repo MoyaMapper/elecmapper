@@ -11,8 +11,10 @@
   }
 }
 
+$toolsRowHeight: 50px;
+
 .textArea {
-  height: 90%;
+  height: calc(100% - #{$toolsRowHeight});
   resize: none;
   border: none;
   border-radius: 0;
@@ -20,8 +22,9 @@
 }
 
 .toolsRow {
-  height: 10%;
-  background: #F6F6F6;
+  height: $toolsRowHeight;
+  background: #fff; 
+  border-top: 1px solid #F6F6F6;
   .toolsCol {
     margin-top: 10px;
   }
