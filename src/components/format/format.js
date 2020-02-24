@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useState, Fragment } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Table, Select, Icon } from 'antd';
+import { Table, Select, Icon, Input } from 'antd';
 import classNames from 'classnames';
 import { constants } from './store';
+import ToolFooter from './components/toolFooter';
 import './format.scss';
 
 const { Option } = Select;
@@ -16,8 +17,17 @@ const Format = (props) => {
     'hidden': props.hidden
   })
   const columns = [
-    { title: 'Key', dataIndex: 'jsonkey', width: 100 },
-    {
+    { // Key
+      title: 'Key', 
+      dataIndex: 'jsonkey', 
+      width: 100, 
+      render: (text, record, index) => {
+        return (
+          <Input defaultValue={text} className="keyInput" onPressEnter={() => {console.log('pressEnter')}} onBlur={() => {console.log('blur')}}></Input>
+        )
+      } 
+    },
+    { // 类型
       title: '类型',
       dataIndex: 'type',
       width: 100,
@@ -42,10 +52,14 @@ const Format = (props) => {
         }
       }
     },
-    { title: '操作', dataIndex: 'action', width: 100, render: () => <Icon type="minus-circle" className="columnActionIconDel" /> },
+    { // 操作
+      title: '操作', 
+      dataIndex: 'action', 
+      width: 100, 
+      render: () => <Icon type="minus-circle" className="columnActionIconDel" /> 
+    },
   ]
   
-
   let container = useRef(null)
   let [tableListHeight, setTableListHeight] = useState(100)
   let [data, setData] = useState([])
@@ -71,7 +85,11 @@ const Format = (props) => {
 
   const updateTableListHeight = (height = null) => {
     const containerHeight = height ? height : container.current.offsetHeight
-    setTableListHeight(containerHeight - 38)
+    setTableListHeight(containerHeight - 38 - 54)
+  }
+
+  const handleExport = () => {
+    console.log('handleExport')
   }
 
   return (
@@ -83,6 +101,7 @@ const Format = (props) => {
         scroll={{ y: tableListHeight }}
         size="small"
       />
+      <ToolFooter toExport={handleExport}/>
     </div>
   )
 }

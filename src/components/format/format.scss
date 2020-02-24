@@ -1,5 +1,5 @@
 .formatWrapper {
-  // background: red;
+  position: relative;
   height: 100%;
   width: 50%;
   float: left;
@@ -15,4 +15,8 @@
   color: red;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.keyInput {
+  width: 50%;
 }
