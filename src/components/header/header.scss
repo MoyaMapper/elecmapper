@@ -6,6 +6,15 @@
   height: 63px;
 }
 
+.title {
+  color: #fff;
+  position: absolute;
+  right: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+}
+
 $tools-height: 40px;
 .tools {
   -webkit-app-region: no-drag;

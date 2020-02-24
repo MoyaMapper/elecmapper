@@ -15,6 +15,7 @@ const openHomePage = () => {
 const Header = (props) => {
   return (
     <div className="headerWrapper">
+      <span className="title">ElecMapper</span>
       <div className="tools">
         <Tooltip placement="topLeft" title="主页">
           <Icon className="menuIcon" type="github" onClick={openHomePage}/>
