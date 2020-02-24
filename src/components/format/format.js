@@ -2,15 +2,21 @@ import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Table, Select, Icon, Input } from 'antd';
 import classNames from 'classnames';
-import { constants } from './store';
+import { constants, actionCreators } from './store';
 import ToolFooter from './components/toolFooter';
+import { flattenFormatDataArr, deleteItemFromJsonData, modifyItemTitle, switchItemType } from './utils/helper';
 import './format.scss';
+import { fromJS } from 'immutable';
 
 const { Option } = Select;
 const { SwiftType, swiftTypeArr } = constants;
 
+const TABLE_TITLE_HEIGHT = 38;
+const TABLE_FOOTER_HEIGHT = 54;
+
 const Format = (props) => {
 
+  const { jsonDataArr, updateJsonDataArr } = props;
   const formatClassName = classNames({
     'formatWrapper': true,
     'fullshow': props.fullshow,
@@ -21,9 +27,14 @@ const Format = (props) => {
       title: 'Key', 
       dataIndex: 'jsonkey', 
       width: 100, 
-      render: (text, record, index) => {
+      render: (text, record) => {
         return (
-          <Input defaultValue={text} className="keyInput" onPressEnter={() => {console.log('pressEnter')}} onBlur={() => {console.log('blur')}}></Input>
+          <Input 
+            defaultValue={text} 
+            className="keyInput" 
+            onPressEnter={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }} 
+            onBlur={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }}
+          />
         )
       } 
     },
@@ -31,7 +42,7 @@ const Format = (props) => {
       title: '类型',
       dataIndex: 'type',
       width: 100,
-      render: (text, record, index) => {
+      render: (text, record) => {
         {
           const findIndex = swiftTypeArr.findIndex((item) => (record.type == item))
           if (findIndex === -1) 
@@ -40,7 +51,7 @@ const Format = (props) => {
             <Select 
               defaultValue={text} 
               style={{ width: 120 }} 
-              onChange={() => { console.log('handleTypeChange', index) }}
+              onChange={(val) => { updateJsonDataArr(switchItemType(jsonDataArr, record, val)) }}
             >
               <Option value={SwiftType.int}>{SwiftType.int}</Option>
               <Option value={SwiftType.bool}>{SwiftType.bool}</Option>
@@ -56,7 +67,15 @@ const Format = (props) => {
       title: '操作', 
       dataIndex: 'action', 
       width: 100, 
-      render: () => <Icon type="minus-circle" className="columnActionIconDel" /> 
+      render: (text, record, index) => {
+        return(
+          <Icon 
+            type="minus-circle"
+            className="columnActionIconDel"
+            onClick={() => { updateJsonDataArr(deleteItemFromJsonData(jsonDataArr, record)) }}
+          />
+        )
+      } 
     },
   ]
   
@@ -78,14 +97,17 @@ const Format = (props) => {
     updateTableListHeight()
   }, [])
 
-  useEffect(() => {
-    console.log('ddd', props.jsonDataArr)
-    setData(props.jsonDataArr)
+  useEffect(() => { // 初始化数据
+    // console.log('ddd', props.jsonDataArr)
+    const newJsonDataArr = fromJS(props.jsonDataArr).toJS()
+    // 初始化 indexArr
+    flattenFormatDataArr(newJsonDataArr)
+    setData(newJsonDataArr)
   }, [props.jsonDataArr])
 
   const updateTableListHeight = (height = null) => {
     const containerHeight = height ? height : container.current.offsetHeight
-    setTableListHeight(containerHeight - 38 - 54)
+    setTableListHeight(containerHeight - TABLE_TITLE_HEIGHT - TABLE_FOOTER_HEIGHT)
   }
 
   const handleExport = () => {
@@ -112,4 +134,10 @@ const mapState = (state) => ({
   jsonDataArr: state.getIn(['format', 'jsonDataArr']).toJS()
 })
 
-export default connect(mapState, null)(Format);
+const mapDispatch = (dispatch) => ({
+  updateJsonDataArr(value) {
+    dispatch(actionCreators.updateJsonData(value));
+  }
+})
+
+export default connect(mapState, mapDispatch)(Format);

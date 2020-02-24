@@ -2,7 +2,7 @@ export const showType = {
   hidden: 0,
   half: 1,
   full: 2
-};
+}
 
 export const SwiftType = {
   int: "Int",
@@ -22,5 +22,12 @@ export const swiftTypeArr = [
   SwiftType.array
 ]
 
+export const OperationType = {
+  modifyTitle: 0,
+  switchSwiftType: 1,
+  delete: 2
+}
+
 export const SWITCH_SHOW_TYPE = "format/SWITCH_SHOW_TYPE";
-export const NEW_FINAL_JSON_DATA = "format/NEW_FINAL_JSON_DATA";
+export const NEW_JSON_DATA = "format/NEW_JSON_DATA";
+export const UPDATE_JSON_DATA = "format/UPDATE_JSON_DATA";

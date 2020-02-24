@@ -9,7 +9,12 @@ export const switchShowType = (value) => ({
 })
 
 const newFinalJsonData = (value) => ({
-  type: constants.NEW_FINAL_JSON_DATA,
+  type: constants.NEW_JSON_DATA,
+  value
+})
+
+export const updateJsonData = (value) => ({
+  type: constants.UPDATE_JSON_DATA,
   value
 })
 
