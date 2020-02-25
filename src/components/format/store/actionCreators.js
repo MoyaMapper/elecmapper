@@ -59,7 +59,8 @@ const handleJsonData = (obj) => {
 export const transformJsonData = (json) => {
   return (dispatch) => {
     let obj = eval('(' + json + ')');
-    const dataArr = handleJsonData(obj);
+    let children = handleJsonData(obj);
+    const dataArr = [{ key: uuidv4(), jsonkey: 'Root', type: 'Model', isRoot: true, children }]
     dispatch(newFinalJsonData(dataArr));
     console.log(dataArr);
   }

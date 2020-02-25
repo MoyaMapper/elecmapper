@@ -25,7 +25,8 @@ export const swiftTypeArr = [
 export const OperationType = {
   modifyTitle: 0,
   switchSwiftType: 1,
-  delete: 2
+  delete: 2,
+  modifyClassName: 3
 }
 
 export const SWITCH_SHOW_TYPE = "format/SWITCH_SHOW_TYPE";

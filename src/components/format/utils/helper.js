@@ -33,6 +33,7 @@ const operateItemFromJsonData = (operationType, jsonDataArr, item, newVal) => {
           p.jsonkey = newVal;
           continue;
         case OperationType.switchSwiftType:
+        case OperationType.modifyClassName:
           p = p[curIndex]
           p.type = newVal;
           continue;
@@ -47,7 +48,7 @@ const operateItemFromJsonData = (operationType, jsonDataArr, item, newVal) => {
     // 非最后一个，必有children
     p = p[curIndex].children
   }
-  // console.log(newData)
+  console.log(newData)
   return newData
 }
 
@@ -64,4 +65,9 @@ export const modifyItemTitle = (jsonDataArr, item, newVal) => {
 // 切换类型
 export const switchItemType = (jsonDataArr, item, newVal) => {
   return operateItemFromJsonData(OperationType.switchSwiftType, jsonDataArr, item, newVal)
+}
+
+// 修改类名
+export const modifyItemClassName = (jsonDataArr, item, newVal) => {
+  return operateItemFromJsonData(OperationType.modifyClassName, jsonDataArr, item, newVal)
 }

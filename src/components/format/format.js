@@ -4,7 +4,7 @@ import { Table, Select, Icon, Input } from 'antd';
 import classNames from 'classnames';
 import { constants, actionCreators } from './store';
 import ToolFooter from './components/toolFooter';
-import { flattenFormatDataArr, deleteItemFromJsonData, modifyItemTitle, switchItemType } from './utils/helper';
+import { flattenFormatDataArr, deleteItemFromJsonData, modifyItemTitle, switchItemType, modifyItemClassName } from './utils/helper';
 import './format.scss';
 import { fromJS } from 'immutable';
 
@@ -24,19 +24,21 @@ const Format = (props) => {
   })
   const columns = [
     { // Key
-      title: 'Key', 
-      dataIndex: 'jsonkey', 
-      width: 100, 
+      title: 'Key',
+      dataIndex: 'jsonkey',
+      width: 100,
       render: (text, record) => {
-        return (
-          <Input 
-            defaultValue={text} 
-            className="keyInput" 
-            onPressEnter={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }} 
-            onBlur={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }}
-          />
-        )
-      } 
+        return record.isRoot
+          ? (<span>{text}</span>)
+          : (
+            <Input
+              defaultValue={text}
+              className="keyInput"
+              onPressEnter={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }}
+              onBlur={(e) => { updateJsonDataArr(modifyItemTitle(jsonDataArr, record, e.target.value)) }}
+            />
+          )
+      }
     },
     { // 类型
       title: '类型',
@@ -45,40 +47,49 @@ const Format = (props) => {
       render: (text, record) => {
         {
           const findIndex = swiftTypeArr.findIndex((item) => (record.type == item))
-          if (findIndex === -1) 
-            return <span>{record.type}</span>
-          return (
-            <Select 
-              defaultValue={text} 
-              style={{ width: 120 }} 
-              onChange={(val) => { updateJsonDataArr(switchItemType(jsonDataArr, record, val)) }}
-            >
-              <Option value={SwiftType.int}>{SwiftType.int}</Option>
-              <Option value={SwiftType.bool}>{SwiftType.bool}</Option>
-              <Option value={SwiftType.float}>{SwiftType.float}</Option>
-              <Option value={SwiftType.double}>{SwiftType.double}</Option>
-              <Option value={SwiftType.string}>{SwiftType.string}</Option>
-            </Select>
+          return (findIndex === -1
+            ? (
+              <Input
+                defaultValue={record.type}
+                className="keyInput"
+                onPressEnter={(e) => { updateJsonDataArr(modifyItemClassName(jsonDataArr, record, e.target.value)) }}
+                onBlur={(e) => { updateJsonDataArr(modifyItemClassName(jsonDataArr, record, e.target.value)) }}
+              />
+            )
+            : (
+              <Select
+                defaultValue={text}
+                style={{ width: 120 }}
+                onChange={(val) => { updateJsonDataArr(switchItemType(jsonDataArr, record, val)) }}
+              >
+                <Option value={SwiftType.int}>{SwiftType.int}</Option>
+                <Option value={SwiftType.bool}>{SwiftType.bool}</Option>
+                <Option value={SwiftType.float}>{SwiftType.float}</Option>
+                <Option value={SwiftType.double}>{SwiftType.double}</Option>
+                <Option value={SwiftType.string}>{SwiftType.string}</Option>
+                <Option value={SwiftType.array}>{SwiftType.array}</Option>
+              </Select>
+            )
           )
         }
       }
     },
     { // 操作
-      title: '操作', 
-      dataIndex: 'action', 
-      width: 100, 
+      title: '操作',
+      dataIndex: 'action',
+      width: 100,
       render: (text, record, index) => {
-        return(
-          <Icon 
+        return (
+          <Icon
             type="minus-circle"
             className="columnActionIconDel"
             onClick={() => { updateJsonDataArr(deleteItemFromJsonData(jsonDataArr, record)) }}
           />
         )
-      } 
+      }
     },
   ]
-  
+
   let container = useRef(null)
   let [tableListHeight, setTableListHeight] = useState(100)
   let [data, setData] = useState([])
@@ -103,7 +114,7 @@ const Format = (props) => {
     // 初始化 indexArr
     flattenFormatDataArr(newJsonDataArr)
     setData(newJsonDataArr)
-  }, [props.jsonDataArr])
+  }, [jsonDataArr])
 
   const updateTableListHeight = (height = null) => {
     const containerHeight = height ? height : container.current.offsetHeight
@@ -122,8 +133,9 @@ const Format = (props) => {
         pagination={false}
         scroll={{ y: tableListHeight }}
         size="small"
+        indentSize={10}
       />
-      <ToolFooter toExport={handleExport}/>
+      <ToolFooter toExport={handleExport} />
     </div>
   )
 }
