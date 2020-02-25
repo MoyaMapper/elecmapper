@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu } = require('electron')
+const menuTemplate = require('./src/common/menuTemplate')
 let win
 
 function createWindow() {
@@ -28,6 +29,10 @@ function createWindow() {
         // 与此同时，你应该删除相应的元素。
         win = null
     })
+
+    // 设置菜单
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
 }
 
 // Electron 会在初始化后并准备
