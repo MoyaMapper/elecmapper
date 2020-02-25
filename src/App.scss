@@ -1,9 +1,11 @@
 .contentWrapper {
   // background: blue;
   height: calc(100vh - 64px - 70px);
+  user-select: none;
 }
 
 .footerWrapper {
   text-align: center;
   border-top: 1px solid #ccc;
+  user-select: none;
 }
