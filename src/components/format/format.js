@@ -7,6 +7,7 @@ import ToolFooter from './components/toolFooter';
 import { flattenFormatDataArr, deleteItemFromJsonData, modifyItemTitle, switchItemType, modifyItemClassName } from './utils/helper';
 import './format.scss';
 import { fromJS } from 'immutable';
+import useIpcRenderer from '../../hooks/useIpcRenderer';
 
 const { Option } = Select;
 const { SwiftType, swiftTypeArr } = constants;
@@ -124,6 +125,11 @@ const Format = (props) => {
   const handleExport = () => {
     console.log('handleExport')
   }
+
+  // 监听原生菜单的导出
+  useIpcRenderer({
+    'export-file': handleExport
+  })
 
   return (
     <div className={formatClassName} ref={container}>
