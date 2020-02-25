@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { Input, Row, Col, Button, message } from 'antd';
-import jsonformat from '../../utils/json/jsonformat';
+import jsonformat from '../../utils/jsonformat';
 import classNames from 'classnames';
 import { constants } from './store';
 import { actionCreators as formatActionCreators } from '../format/store';
