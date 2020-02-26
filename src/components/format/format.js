@@ -1,10 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Table, Select, Icon, Input } from 'antd';
+import { Table, Select, Icon, Input, message } from 'antd';
 import classNames from 'classnames';
 import { constants, actionCreators } from './store';
 import ToolFooter from './components/toolFooter';
-import { flattenFormatDataArr, deleteItemFromJsonData, modifyItemTitle, switchItemType, modifyItemClassName } from './utils/helper';
+import { 
+  flattenFormatDataArr, 
+  deleteItemFromJsonData, 
+  modifyItemTitle, 
+  switchItemType, 
+  modifyItemClassName, 
+  exportSwiftModelFile 
+} from './utils/helper';
 import './format.scss';
 import { fromJS } from 'immutable';
 import useIpcRenderer from '../../hooks/useIpcRenderer';
@@ -124,6 +131,9 @@ const Format = (props) => {
 
   const handleExport = () => {
     console.log('handleExport')
+    exportSwiftModelFile(jsonDataArr, () => {
+      message.success('导出成功')
+    })
   }
 
   // 监听原生菜单的导出

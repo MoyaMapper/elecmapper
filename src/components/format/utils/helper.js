@@ -1,5 +1,10 @@
 import { fromJS } from 'immutable';
-import { OperationType } from '../store/constants';
+import { OperationType, SwiftType, SwiftDefaultVal } from '../store/constants';
+import fileHelper from '../../../utils/fileHelper';
+import { dateFormat } from '../../../utils/dateHelper';
+const { appName, organization } = require('../../../common/constants');
+
+const { remote } = window.require('electron');
 
 // 将 format 下的 jsonDataArr 进行平铺, 并添加下标数组 indexArr
 // 调用：flattenFormatDataArr(jsonDataArr)
@@ -48,7 +53,7 @@ const operateItemFromJsonData = (operationType, jsonDataArr, item, newVal) => {
     // 非最后一个，必有children
     p = p[curIndex].children
   }
-  console.log(newData)
+  // console.log(newData)
   return newData
 }
 
@@ -70,4 +75,84 @@ export const switchItemType = (jsonDataArr, item, newVal) => {
 // 修改类名
 export const modifyItemClassName = (jsonDataArr, item, newVal) => {
   return operateItemFromJsonData(OperationType.modifyClassName, jsonDataArr, item, newVal)
+}
+
+const handleJsonDataArrToSwiftPropsStr = (jsonDataArr, saveDirPath) => {
+  let contentArr = [ ]
+  const date = new Date()
+  const year = date.getFullYear()
+  const dateStr = dateFormat(date, "yyyy/MM/dd")
+
+  for (let i = 0; i < jsonDataArr.length; i++) {
+    let p = jsonDataArr[i]
+    let type = p.type
+    let key = p.jsonkey
+    switch (type) {
+      case SwiftType.int:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.int} \n`)
+        break;
+      case SwiftType.bool:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.bool} \n`)
+        break;
+      case SwiftType.float:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.float} \n`)
+        break;
+      case SwiftType.double:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.double} \n`)
+        break;
+      case SwiftType.string:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.string} \n`)
+        break;
+      case SwiftType.array:
+        contentArr.push(`    var ${key} : ${type} = ${SwiftDefaultVal.array} \n`)
+        break;
+      default: // 自定义的类名，创建文件
+        contentArr.push(`    var ${key} : ${type} = ${type}\(\) \n`)
+        
+        let arr = [`//
+//  MultipleModel.swift
+//
+//  Created by ${appName} on ${dateStr}.
+//  Copyright © ${year}年 ${organization}. All rights reserved.
+//
+import SwiftyJSON
+import MoyaMapper
+
+struct ${type}: Modelable {
+`
+
+        ]
+        const content = handleJsonDataArrToSwiftPropsStr(p.children, saveDirPath)
+        arr.push(content)
+        arr.push(` 
+    mutating func mapping(_ json: JSON) {
+        
+    }
+}
+        `)
+        const saveFilePath = `${saveDirPath}/${type}.swift`
+        fileHelper.writeFile(saveFilePath, arr.join(''))
+        break;
+    }
+  }
+  contentArr.push()
+  return contentArr.join('')
+}
+
+export const exportSwiftModelFile = (jsonDataArr, callback=null) => {
+  if (jsonDataArr.length < 1)
+    return
+  remote.dialog.showOpenDialog({
+    title: '选择存储位置',
+    properties: ['openDirectory']
+  }).then((result) => {
+    if (result.canceled || result.filePaths.length < 1)
+      return
+    
+    // 目录路径
+    const filePath = result.filePaths[0]
+    handleJsonDataArrToSwiftPropsStr(jsonDataArr, filePath)
+    if (callback)
+      callback()
+  })
 }

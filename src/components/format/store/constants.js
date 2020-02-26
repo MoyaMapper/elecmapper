@@ -13,6 +13,15 @@ export const SwiftType = {
   array: "Array"
 }
 
+export const SwiftDefaultVal = {
+  int: 0,
+  bool: false,
+  float: 0,
+  double: 0,
+  string: "\"\"",
+  array: "[]",
+}
+
 export const swiftTypeArr = [
   SwiftType.int, 
   SwiftType.bool, 
