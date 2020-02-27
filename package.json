@@ -4,8 +4,7 @@
   "description": "一个基于Electron，将JSON转成Model，为方便使用MoyaMapper而做的工具",
   "private": true,
   "main": "main.js",
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MoyaMapper/elecmapper.git"
@@ -65,13 +64,18 @@
     "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
+    "release": "electron-builder",
     "prepack": "npm run build && npm run buildMain",
     "predist": "npm run build && npm run buildMain",
+    "prerelease": "npm run build && npm run buildMain",
     "buildMain": "webpack --progress --mode production"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "publish": [
+    "github"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -97,6 +101,9 @@
     "customize-cra": "^0.9.1",
     "electron": "^8.0.1",
     "electron-builder": "^22.3.2",
+    "electron-is-dev": "^1.1.0",
+    "electron-updater": "^4.2.2",
+    "immutable": "^4.0.0-rc.12",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
@@ -110,8 +117,6 @@
     "wait-on": "^4.0.0",
     "webpack": "4.41.5",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "3.10.2",
-    "electron-is-dev": "^1.1.0",
-    "immutable": "^4.0.0-rc.12"
+    "webpack-dev-server": "3.10.2"
   }
 }
