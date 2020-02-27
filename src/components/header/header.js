@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { Icon, Tooltip } from 'antd';
 import { constants as editConstants, actionCreators as editActionCreators } from '../edit/store';
 import { constants as formatConstants, actionCreators as formatActionCreators } from '../format/store';
+import { homepage } from '../../common/constants';
 import './header.scss';
 
 // 导入 node.js 模块
 const { shell } = window.require('electron');
 
 const openHomePage = () => {
-  shell.openExternal("https://github.com/MoyaMapper");
+  shell.openExternal(homepage);
 }
 
 const Header = (props) => {
