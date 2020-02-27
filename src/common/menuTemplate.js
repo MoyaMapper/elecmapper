@@ -123,7 +123,11 @@ const template = [
       {
         label: `作者: ${constants.author}`,
         click: function () { shell.openExternal(constants.authorUrl) }
-      },
+      }, {
+        type: 'separator'
+      }, {
+        label: `版本: ${app.getVersion()}`
+      }
     ]
   },
 ]
