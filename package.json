@@ -1,29 +1,73 @@
 {
   "name": "elecmapper",
   "version": "0.0.1",
+  "description": "一个基于Electron，将JSON转成Model，为方便使用MoyaMapper而做的工具",
   "private": true,
   "main": "main.js",
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "antd": "^3.26.11",
-    "immutable": "^4.0.0-rc.12",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-redux": "^7.2.0",
-    "react-scripts": "3.4.0",
-    "redux": "^4.0.5",
-    "redux-immutable": "^4.0.0",
-    "redux-thunk": "^2.3.0",
-    "uuid": "^3.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoyaMapper/elecmapper.git"
+  },
+  "author": {
+    "name": "LinXunFeng",
+    "email": "linxunfeng@yeah.net",
+    "url": "https://github.com/LinXunFeng"
+  },
+  "bugs": {
+    "url": "https://github.com/MoyaMapper/elecmapper/issues"
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "com.moyamapper.elecmapper",
+    "productName": "ElecMapper",
+    "copyright": "Copyright © 2020 ${author}",
+    "npmRebuild": false,
+    "directories": {
+      "buildResources": "src/assets"
+    },
+    "extraMetadata": {
+      "main": "./build/main.js"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "dmg": {
+      "background": "src/assets/appdmg.png",
+      "icon": "src/assets/icon.icns",
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    }
   },
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
-    "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\""
+    "dev": "concurrently \"wait-on http://localhost:3000 && electron .\" \"cross-env BROWSER=none npm start\"",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "prepack": "npm run build && npm run buildMain",
+    "predist": "npm run build && npm run buildMain",
+    "buildMain": "webpack --progress --mode production"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,14 +85,33 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "antd": "^3.26.11",
+    "antd-dayjs-webpack-plugin": "^0.0.8",
     "babel-plugin-import": "^1.13.0",
     "classnames": "^2.2.6",
     "concurrently": "^5.1.0",
     "cross-env": "^7.0.0",
     "customize-cra": "^0.9.1",
     "electron": "^8.0.1",
+    "electron-builder": "^22.3.2",
     "node-sass": "^4.13.1",
+    "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
-    "wait-on": "^4.0.0"
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.2.0",
+    "react-scripts": "3.4.0",
+    "redux": "^4.0.5",
+    "redux-immutable": "^4.0.0",
+    "redux-thunk": "^2.3.0",
+    "uuid": "^3.4.0",
+    "wait-on": "^4.0.0",
+    "webpack": "4.41.5",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "3.10.2",
+    "electron-is-dev": "^1.1.0",
+    "immutable": "^4.0.0-rc.12"
   }
 }
