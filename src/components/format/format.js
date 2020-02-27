@@ -54,7 +54,7 @@ const Format = (props) => {
       width: 100,
       render: (text, record) => {
         {
-          const findIndex = swiftTypeArr.findIndex((item) => (record.type == item))
+          const findIndex = swiftTypeArr.findIndex((item) => (record.type === item))
           return (findIndex === -1
             ? (
               <Input
@@ -130,7 +130,7 @@ const Format = (props) => {
   }
 
   const handleExport = () => {
-    console.log('handleExport')
+    // console.log('handleExport')
     exportSwiftModelFile(jsonDataArr, () => {
       message.success('导出成功')
     })

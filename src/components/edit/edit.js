@@ -14,13 +14,13 @@ const Edit = (props) => {
 
   const toFormat = () => {
     const currentText = textArea.current.state.value
-    if (currentText == undefined || !currentText.length) {
+    if (currentText === undefined || !currentText.length) {
       message.warning('请先填写json数据');
       return;
     }
     // 格式化json数据
     const value = jsonformat(currentText, false)
-    if (`${value}` == 'undefined') {
+    if (`${value}` === 'undefined') {
       console.log('进来了');
       message.error('无法格式化当前json数据');
       return;
