@@ -1,7 +1,9 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, dialog } = require('electron')
 const menuTemplate = require('./src/common/menuTemplate')
 const isDev = require('electron-is-dev')
 const path = require('path')
+const { autoUpdater } = require('electron-updater')
+
 let win
 
 function createWindow() {
@@ -17,12 +19,7 @@ function createWindow() {
   })
 
   const urlLocation = isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, './index.html')}`
-  win.loadURL(urlLocation)
-  // 然后加载应用的 index.html。  url 及本地文件形式
-  // win.loadURL('http://localhost:3000')
-  // win.loadFile('public/index.html')
-  //如果想要让electron加载本地打包好的React文件的build文件下的内容是这样子的：(这个问题困扰我很久，解决了。分享下2019-4-29添加)
-  // win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)  
+  win.loadURL(urlLocation) 
 
   // 打开开发者工具
   // win.webContents.openDevTools()
@@ -42,6 +39,9 @@ function createWindow() {
   if (isDev && process.platform === 'darwin') {
     app.dock.setIcon('./src/assets/logo.png')
   }
+
+  // 检查更新
+  checkUpdate()
 }
 
 // Electron 会在初始化后并准备
@@ -68,3 +68,55 @@ app.on('activate', () => {
 
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
+
+
+  // 检查更新
+const checkUpdate = () => {
+  if (isDev) {
+    autoUpdater.updateConfigPath = path.join(__dirname, 'dev-app-update.yml')
+  }
+  autoUpdater.autoDownload = false // 关闭自动下载功能
+  autoUpdater.checkForUpdates() 
+  // autoUpdater.checkForUpdatesAndNotify() // 打包后的程序才有用，开发环境下没用
+  autoUpdater.on('error', (error) => {
+    dialog.showErrorBox('Error: ', error == null ? "unknow" : (error.stack || error.message))
+  })
+  autoUpdater.on('checking-for-update', () => { 
+    // 该回调会在 checkForUpdates 后被调用
+    console.log('Checking for update...')
+  })
+  autoUpdater.on('update-available', () => {
+    dialog.showMessageBox({
+      type: 'info',
+      title: '应用有新的版本',
+      message: '发现新版本，是否现在更新？',
+      buttons: ['是', '否']
+    }).then((result) => {
+      // console.log('选择结果：', result)
+      if (result.response === 0) {
+        autoUpdater.downloadUpdate()
+      }
+    })
+  })
+  autoUpdater.on('update-not-available', () => {
+    // dialog.showMessageBox({
+    //   title: '没有新版本',
+    //   message: '当前已经是最新版本'
+    // })
+  })
+  autoUpdater.on('download-progress', (progressObj) => {
+    let log_message = "Download speed: " + progressObj.bytesPerSecond
+    log_message = log_message + ' - Download' + progressObj.percent + '%'
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')'
+    console.log(log_message)
+  })
+  autoUpdater.on('update-downloaded', () => {
+    dialog.showMessageBox({
+      title: '安装更新',
+      message: '更新下载完毕，应用将重启并进行安装'
+    }).then(() => {
+      // setImmediate()方法用于中断长时间运行的操作，并在浏览器完成其他操作（如事件和显示更新）后立即运行回调函数。 
+      setImmediate(() => autoUpdater.quitAndInstall())
+    })
+  })
+}
