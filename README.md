@@ -5,6 +5,10 @@
 
 
 > `ElectMapper` 是为方便使用 `MoyaMapper` 而制作的 `JSON` 转模型 工具
+>
+> [MoyaMapper](https://github.com/MoyaMapper/MoyaMapper) : 快速解析模型工具，支持RxSwift。同时支持缓存功能 
+>
+> `MoyaMapper` 使用手册 https://MoyaMapper.github.io 
 
 
 
@@ -28,9 +32,15 @@
 
 1. 将 `json数据` 粘贴至左边的编辑框内，点击 `转换`
 2. 在右边的调整区进行调整内容
-3. 点击导出，输出 `Swift` 模型文件
+3. 点击 `导出` 按钮，输出 `Swift` 模型文件
 
 ![使用](./other/screenshots/2.png)
+
+
+
+## 作者
+
+- [LinXunFeng](https://github.com/LinXunFeng)
 
 
 
@@ -43,10 +53,13 @@ npm i
 
 # 运行
 npm run dev
+
+# 打包
+npm run pack
 ```
 
 
 
 ## License
 
-MIT
+ElectMapper is available under the MIT license. See the LICENSE file for more info.
