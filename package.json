@@ -99,7 +99,7 @@
     "concurrently": "^5.1.0",
     "cross-env": "^7.0.0",
     "customize-cra": "^0.9.1",
-    "electron": "^8.0.1",
+    "electron": "^11.5.0",
     "electron-builder": "^22.3.2",
     "electron-is-dev": "^1.1.0",
     "electron-updater": "^4.2.2",
